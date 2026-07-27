@@ -1,0 +1,15 @@
+experiment:
+  name: qwen2.5-3b-lima
+
+model:
+  name: Qwen/Qwen2.5-3B
+
+dataset:
+  name: GAIR/lima
+  max_length: 2048
+
+training:
+  epochs: 3
+  learning_rate: 2e-5
+  batch_size: 1
+  gradient_accumulation_steps: 8

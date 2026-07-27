@@ -1,0 +1,10 @@
+# Generate requirements.txt:
+#   uv pip compile requirements.in -o requirements.txt
+-e .
+accelerate
+datasets
+pyyaml
+torch
+tqdm
+transformers
+pyyaml
