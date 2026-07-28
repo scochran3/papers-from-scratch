@@ -1,6 +1,6 @@
 from datasets import load_dataset
 from dotenv import load_dotenv
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 
 from lima.config import load_config
 from lima.paths import PROJECT_ROOT
@@ -24,6 +24,8 @@ def create_dataset_splits(config: dict, val_size: float = 0.1):
 class LimaDataset(Dataset):
 
     def __init__(self, dataset: "DatasetDict"):
+
+        # Explicitly limit to single turn conversations for now, as we don't have a good way to handle multi-turn conversations yet.
         self.dataset = dataset.filter(lambda ex: len(ex["conversations"]) == 2)
 
     def __len__(self):
@@ -51,12 +53,23 @@ class LimaDataset(Dataset):
             ]
         }
 
+
+def create_dataloader(dataset: Dataset, batch_size: int, shuffle: bool = True):
+    """
+    Creates a DataLoader for the given dataset.
+
+    Args:
+        dataset (Dataset): The dataset to create the DataLoader for.
+        batch_size (int): The batch size for the DataLoader.
+        shuffle (bool): Whether to shuffle the dataset. Default is True.
+    
+    Returns:
+        DataLoader: The created DataLoader.
+    """
+    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
     
    
 if __name__ == "__main__":
     config = load_config()
     full_dataset = create_dataset_splits(config=config, val_size=0.1)
     lima_dataset = LimaDataset(dataset=full_dataset["train"])
-    for sample in lima_dataset:
-        print(sample)
-        break
