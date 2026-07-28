@@ -1,9 +1,7 @@
 """Filesystem anchors for the LIMA project.
 
 Every path in this project is derived from PROJECT_ROOT, which is computed from
-*this file's* location on disk. Nothing here depends on the current working
-directory, so a script behaves identically whether you launch it from LIMA/,
-from scripts/, or from your home directory.
+*this file's* location on disk. 
 """
 
 from pathlib import Path
