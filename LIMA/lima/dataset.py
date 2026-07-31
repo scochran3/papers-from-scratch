@@ -1,3 +1,5 @@
+from typing import Callable
+
 from datasets import load_dataset
 from dotenv import load_dotenv
 from torch.utils.data import Dataset, DataLoader
@@ -19,7 +21,6 @@ def create_dataset_splits(config: dict, val_size: float = 0.1):
         "validation": val_dataset,
         "test": test_dataset
     }
-
 
 class LimaDataset(Dataset):
 
@@ -54,7 +55,13 @@ class LimaDataset(Dataset):
         }
 
 
-def create_dataloader(dataset: Dataset, batch_size: int, shuffle: bool = True):
+def create_dataloader(
+        dataset: Dataset,
+        collate_fn: Callable,
+        batch_size: int = 16, 
+        shuffle: bool = True,
+        drop_last: bool = True
+    ):
     """
     Creates a DataLoader for the given dataset.
 
@@ -66,7 +73,13 @@ def create_dataloader(dataset: Dataset, batch_size: int, shuffle: bool = True):
     Returns:
         DataLoader: The created DataLoader.
     """
-    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
+    return DataLoader(
+        dataset, 
+        batch_size=batch_size, 
+        shuffle=shuffle,
+        collate_fn=collate_fn,
+        drop_last=drop_last
+    )
     
    
 if __name__ == "__main__":
